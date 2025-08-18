@@ -32,6 +32,7 @@ __all__ = [
     "convert_nnunet_to_monai_bundle",
     "convert_monai_bundle_to_nnunet",
     "ModelnnUNetWrapper",
+    "EnsembleProbabilitiesToSegmentation"
 ]
 
 
