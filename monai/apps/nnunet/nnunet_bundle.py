@@ -874,9 +874,15 @@ class ModelnnUNetWrapper(torch.nn.Module):
             os.makedirs(outfolder, exist_ok=True)
             outfile = str(Path(outfolder).joinpath(outfile_name))
             print(' Saving files to: ', outfile)
-            
-            # Extract affine matrix from metadata (shape: [1, 4, 4])
-            affine = x.meta['affine'][0].cpu().numpy()  # shape (4, 4)
+
+            # Extract 4x4 affine matrix from metadata if affine shape is [1,4,4]
+            affine = None
+            if x.meta['affine'].shape == (1, 4, 4):
+                affine = x.meta['affine'][0].cpu().numpy()  # shape (4, 4)
+            elif x.meta['affine'].shape == (4, 4):
+                affine = x.meta['affine'].cpu().numpy()  # shape (4, 4)
+            else:
+                raise ValueError(f"Unexpected affine shape: {x.meta['affine'].shape}")
 
             # Extract spacing as norm of each column in affine
             spacing = tuple(np.linalg.norm(affine[:3, i]) for i in range(3))
