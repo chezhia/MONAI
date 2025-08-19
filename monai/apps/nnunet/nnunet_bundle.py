@@ -862,7 +862,14 @@ class ModelnnUNetWrapper(torch.nn.Module):
         
         image_or_list_of_images = x.cpu().numpy()[0, :]
 
-       
+        # Print shape of image
+        # if list, print shape of each image
+        if isinstance(image_or_list_of_images, list):
+            # Print first image shape
+            print(f'Shape of preprocessed image 0: ', image_or_list_of_images[0].shape)
+        else:
+            print('Shape of preprocessed image: ', image_or_list_of_images.shape)
+
         ## Add error catching later - Elan
         if self.save_files:
             # Save the input image to a file
