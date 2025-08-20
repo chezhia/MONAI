@@ -860,6 +860,9 @@ class ModelnnUNetWrapper(torch.nn.Module):
             raise TypeError("Input must be a MetaTensor or a tuple of MetaTensors.")
 
         
+        # Print x type and x shape
+        print(f'Input type (x): {type(x)}, shape: {x.shape}')
+
         image_or_list_of_images = x.cpu().numpy()[0, :]
 
         # Print shape of image
