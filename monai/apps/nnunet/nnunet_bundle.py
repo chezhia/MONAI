@@ -844,14 +844,18 @@ class ModelnnUNetWrapper(torch.nn.Module):
             print(f'bundle: Input shape (x): {x.shape}')
             # print x.meta['affine'] shape
             print(f'bundle: Input affine shape (x.meta["affine"]): {x.meta["affine"].shape}')
+            print(f'bundle: Input affine (x.meta["affine"]): {x.meta["affine"]}')
+            print(f'bundle: Input affine (x.meta["pixdim"]): {x.meta["pixdim"]}')
 
             spatial_shape = list(x.shape[-3:])  # [H, W, D] or [X, Y, Z]
             if "pixdim" in x.meta:
                 if x.meta["pixdim"].ndim == 1:
+                    print('Getting spacing from pixdim...')
                     properties_or_list_of_properties = {"spacing": x.meta["pixdim"][1:4].tolist()}
                 else:
                     properties_or_list_of_properties = {"spacing": x.meta["pixdim"][0][1:4].numpy().tolist()}
             elif "affine" in x.meta:
+                print('Getting spacing from affine matrix...')
                 spacing = [
                     abs(x.meta["affine"][0][0].item()),
                     abs(x.meta["affine"][1][1].item()),
