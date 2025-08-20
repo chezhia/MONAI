@@ -868,7 +868,9 @@ class ModelnnUNetWrapper(torch.nn.Module):
         else:
             raise TypeError("Input must be a MetaTensor or a tuple of MetaTensors.")
 
-        
+        # print properties_or_list_of_properties
+        print(f'Input properties: {properties_or_list_of_properties}')
+
         # Print x type and x shape
         print(f'Input type (x): {type(x)}, shape: {x.shape}')
 
