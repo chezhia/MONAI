@@ -840,6 +840,11 @@ class ModelnnUNetWrapper(torch.nn.Module):
             - The output tensor is concatenated along the batch dimension and returned as a MetaTensor with the same metadata.
         """
         if isinstance(x, MetaTensor):
+            # print x shape
+            print(f'bundle: Input shape (x): {x.shape}')
+            # print x.meta['affine'] shape
+            print(f'bundle: Input affine shape (x.meta["affine"]): {x.meta["affine"].shape}')
+
             spatial_shape = list(x.shape[-3:])  # [H, W, D] or [X, Y, Z]
             if "pixdim" in x.meta:
                 if x.meta["pixdim"].ndim == 1:
