@@ -840,26 +840,26 @@ class ModelnnUNetWrapper(torch.nn.Module):
             - The output tensor is concatenated along the batch dimension and returned as a MetaTensor with the same metadata.
         """
         if isinstance(x, MetaTensor):
-            # print x shape
-            print(f'bundle: Input shape (x): {x.shape}')
-            # print x.meta['affine'] shape
-            print(f'bundle: Input affine shape (x.meta["affine"]): {x.meta["affine"].shape}')
-            print(f'bundle: Input affine (x.meta["affine"]): {x.meta["affine"]}')
-            print(f'bundle: Input affine (x.meta["pixdim"]): {x.meta["pixdim"]}')
+            # # print x shape
+            # print(f'bundle: Input shape (x): {x.shape}')
+            # # print x.meta['affine'] shape
+            # print(f'bundle: Input affine shape (x.meta["affine"]): {x.meta["affine"].shape}')
+            # print(f'bundle: Input affine (x.meta["affine"]): {x.meta["affine"]}')
+            # print(f'bundle: Input affine (x.meta["pixdim"]): {x.meta["pixdim"]}')
 
             spatial_shape = list(x.shape[-3:])  # [H, W, D] or [X, Y, Z]
             if "pixdim" in x.meta:
+                print('Getting spacing from pixdim...')
                 if x.meta["pixdim"].ndim == 1:
-                    print('Getting spacing from pixdim...')
                     properties_or_list_of_properties = {"spacing": x.meta["pixdim"][1:4].tolist()}
                 else:
                     properties_or_list_of_properties = {"spacing": x.meta["pixdim"][0][1:4].numpy().tolist()}
             elif "affine" in x.meta:
                 print('Getting spacing from affine matrix...')
                 spacing = [
-                    abs(x.meta["affine"][0][0].item()),
-                    abs(x.meta["affine"][1][1].item()),
-                    abs(x.meta["affine"][2][2].item()),
+                    abs(x.meta["affine"][0][0][0].item()),
+                    abs(x.meta["affine"][0][1][1].item()),
+                    abs(x.meta["affine"][0][2][2].item()),
                 ]
                 properties_or_list_of_properties = {"spacing": spacing}
             else:
@@ -895,6 +895,7 @@ class ModelnnUNetWrapper(torch.nn.Module):
             print(' Saving files to: ', outfile)
 
             # Extract 4x4 affine matrix from metadata if affine shape is [1,4,4]
+            # Need to make sure this works for 2D images
             affine = None
             if x.meta['affine'].shape == (1, 4, 4):
                 affine = x.meta['affine'][0].cpu().numpy()  # shape (4, 4)
