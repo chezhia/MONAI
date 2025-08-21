@@ -843,8 +843,10 @@ class ModelnnUNetWrapper(torch.nn.Module):
             # # print x shape
             # print(f'bundle: Input shape (x): {x.shape}')
             # # print x.meta['affine'] shape
-            # print(f'bundle: Input affine shape (x.meta["affine"]): {x.meta["affine"].shape}')
-            # print(f'bundle: Input affine (x.meta["affine"]): {x.meta["affine"]}')
+            print(f'bundle: Input affine shape (x.meta["affine"]): {x.meta["affine"].shape}')
+            print(f'bundle: Input affine (x.meta["affine"]): {x.meta["affine"]}')
+            print(f'bundle: Input affine (x.meta["affine"][0] shape): {x.meta["affine"][0].shape}')
+
             # print(f'bundle: Input affine (x.meta["pixdim"]): {x.meta["pixdim"]}')
 
             spatial_shape = list(x.shape[-3:])  # [H, W, D] or [X, Y, Z]
