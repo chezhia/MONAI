@@ -858,11 +858,12 @@ class ModelnnUNetWrapper(torch.nn.Module):
                     properties_or_list_of_properties = {"spacing": x.meta["pixdim"][0][1:4].numpy().tolist()}
             elif "affine" in x.meta:
                 print('Getting spacing from affine matrix...')
-                spacing = [
-                    abs(x.meta["affine"][0][0][0].item()),
-                    abs(x.meta["affine"][0][1][1].item()),
-                    abs(x.meta["affine"][0][2][2].item()),
-                ]
+                affine = x.meta["affine"][0].cpu().numpy() if x.meta["affine"].ndim == 3 else x.meta["affine"].cpu().numpy()
+                spacing = np.array([
+                    np.sqrt(np.sum(affine[:3, 0]**2)),
+                    np.sqrt(np.sum(affine[:3, 1]**2)),
+                    np.sqrt(np.sum(affine[:3, 2]**2))
+                    ])
                 properties_or_list_of_properties = {"spacing": spacing}
             else:
                 properties_or_list_of_properties = {"spacing": [1.0, 1.0, 1.0]}
